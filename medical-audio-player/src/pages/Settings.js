@@ -4,8 +4,9 @@ import Form from 'react-bootstrap/Form';
 
 const Settings = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [playbackDevice, setPlaybackDevice] = useState('Select Playback Device');
+  const [playbackDevice, setPlaybackDevice] = useState('');
   const [conversationParty, setConversationParty] = useState('Doctor - Patient');
+  const [playbackDevices, setPlaybackDevices] = useState([]);
 
   useEffect(() => {
     // Load settings from local storage on component mount
@@ -16,6 +17,19 @@ const Settings = () => {
     if (savedIsDarkMode !== null) setIsDarkMode(savedIsDarkMode);
     if (savedPlaybackDevice) setPlaybackDevice(savedPlaybackDevice);
     if (savedConversationParty) setConversationParty(savedConversationParty);
+
+    // Check if navigator.mediaDevices is supported
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        .then(() => getConnectedDevices('audiooutput', setPlaybackDevices))
+        .catch((err) => {
+          console.error('Permission denied or error: ', err);
+          setPlaybackDevices([{ deviceId: 'default', label: 'Default Device' }]);
+        });
+    } else {
+      console.log('Media devices not supported');
+      setPlaybackDevices([{ deviceId: 'default', label: 'Default Device' }]);
+    }
   }, []);
 
   const toggleDarkMode = () => {
@@ -56,9 +70,12 @@ const Settings = () => {
         <Form.Group controlId="formPlaybackDevice">
           <Form.Label>Playback Device</Form.Label>
           <Form.Select value={playbackDevice} onChange={handlePlaybackDeviceChange}>
-            <option value="Device 1">Device 1</option>
-            <option value="Device 2">Device 2</option>
-            <option value="Device 3">Device 3</option>
+            <option value=''>Select Playback Device</option>
+            {playbackDevices.map((device) => (
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label || `Device ${device.deviceId}`}
+              </option>
+            ))}
           </Form.Select>
         </Form.Group>
       </Form>
@@ -67,27 +84,41 @@ const Settings = () => {
         <Form.Group controlId="formConversationParty">
           <Form.Label>Conversation Party</Form.Label>
           <Form.Select value={conversationParty} onChange={handleConversationPartyChange}>
-            <option>Doctor - Patient</option>
-            <option>Doctor - Robot - Patient</option>
-            <option>Robot - Patient</option>
+            <option value="Doctor - Patient">Doctor - Patient</option>
+            <option value="Doctor - Robot - Patient">Doctor - Robot - Patient</option>
+            <option value="Robot - Patient">Robot - Patient</option>
           </Form.Select>
         </Form.Group>
       </Form>
 
-      <Form.Label>Theme</Form.Label>
-      <div style={formStyles}>
-        <Button onClick={toggleDarkMode} variant={isDarkMode ? 'dark' : 'light'}>
-          {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        </Button>
-      </div>
+      <Form.Group>
+        <Form.Label>Theme</Form.Label>
+        <div style={formStyles}>
+          <Button onClick={toggleDarkMode} variant={isDarkMode ? 'dark' : 'light'} title="Toggle dark mode">
+            {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          </Button>
+        </div>
+      </Form.Group>
 
-      <div style={formStyles}>
-        <Button onClick={handleSave} variant="success">
-          Save Settings
-        </Button>
-      </div>
+      <Form.Group>
+        <div style={formStyles}>
+          <Button onClick={handleSave} variant="success" title="Save settings">
+            Save Settings
+          </Button>
+        </div>
+      </Form.Group>
     </div>
   );
 };
+
+// Function to get connected devices
+function getConnectedDevices(type, callback) {
+  navigator.mediaDevices.enumerateDevices()
+    .then(devices => {
+      const filtered = devices.filter(device => device.kind === type);
+      callback(filtered);
+    })
+    .catch(err => console.error('Error enumerating devices:', err));
+}
 
 export default Settings;
