@@ -1,0 +1,90 @@
+[01] DOCTOR: Hello, my name is Pepper, and I'm a robot nurse working on the
+[01] ROBOT: Hello, my name is Pepper, and I'm a robot News working.
+[01] PATIENT: Hello.
+[02] DOCTOR: On the ward today, can you please confirm your name and date of birth.
+[02] ROBOT: On the water day, can you please confirm your name and date of birth?
+[02] PATIENT: My name is John Smith [uh], first of January 2001.
+[03] DOCTOR: Thank You, Jon, so what can I help you with today?
+[03] ROBOT: Thank You, Jon, so what can I help you with today?
+[03] PATIENT: I have [uh] short of breath over the past two weeks, and recently producing thick white phlegm.
+[04] DOCTOR: I'd like to ask you some more questions about your breathlessness, is that, ok?
+[04] ROBOT: I'd like to ask you some more questions about your breathlessness, is that, ok?
+[04] PATIENT: [uh] Yes.
+[05] DOCTOR: How many days would you say you have felt breathless?
+[05] ROBOT: How many days would you say you have felt breathless?
+[05] PATIENT: [uh] Over the past two weeks.
+[06] DOCTOR: During the day, are there any times where you feel more out of breath?
+[06] ROBOT: During the day, are there any times where you feel more out of breath?
+[06] PATIENT: [uh] It's worst in the morning and then, [uh] when the weather is cold.
+[07] DOCTOR: And do you have any other symptoms?
+[07] ROBOT: And do you have any other symptoms?
+[07] PATIENT: [uhh] Recently producing white thick phlegm.
+[08] DOCTOR: I see have these caused
+[08] ROBOT: I see have these chords.
+[08] PATIENT: [silence]
+[09] DOCTOR: I see have these caused any problems with your sleep.
+[09] ROBOT: I see how this caused any problems with your sleep.
+[09] PATIENT: [um], I don't know.
+[10] DOCTOR: OK, and is there anything at all that helps relieve your shortness of breath?
+[10] ROBOT: OK, and is there anything at all that helps relieve your shortness of breath?
+[10] PATIENT: [um] Yes, [uh] exercising and drinking herbal tea.
+[11] DOCTOR: OK, and now I'm just going to ask you a couple of questions about your past medical history is that OK with you?
+[11] ROBOT: OK, and I'm just going to ask you a couple of questions about your past medical history is that OK with you.
+[11] PATIENT: [yeah] that's fine.
+[12] DOCTOR: Thank You, Jon, do you smoke at all?
+[12] ROBOT: Thank You, Jon, do you smoke at all?
+[12] PATIENT: [uh] No.
+[13] DOCTOR: OK, and do you drink at all?
+[13] ROBOT: OK, and do you drink at all?
+[13] PATIENT: [uh] No.
+[14] DOCTOR: Do you see your doctor for any other reason?
+[14] ROBOT: Do you see your doctor for any other reason?
+[14] PATIENT: [um], Hayfever and eczema.
+[15] DOCTOR: I can see that in your medical records, now I would like to ask you questions regarding any medication, are you currently taking any prescribed drugs?
+[15] ROBOT: I can see that in your medical records now, I would like to ask you questions regarding any medication, are you currently taking any prescribed drugs?
+[15] PATIENT: [uh] [yeah] I'm taking Loratadine.
+[16] DOCTOR: Yes, that's an antihistamine, how often do you take this?
+[16] ROBOT: Yes, that's an antihistamine, how often do you take this?
+[16] PATIENT: [um] I don't know, just whenever I need it.
+[17] DOCTOR: OK, and do you have any allergies to any other drugs?
+[17] ROBOT: OK, and do you have any allergies to any other drugs?
+[17] PATIENT: [um] None I'm, none I'm aware of.
+[18] DOCTOR: Perfect, I'm just going to ask you a couple of questions about your life connected to your condition to get a better idea of what is happening, would that be OK?
+[18] ROBOT: Perfect, I'm just going to ask you a couple of questions about your life connected to your condition to get a better idea of what is happening, would that be OK?
+[18] PATIENT: [uh] [yeah] that's fine.
+[19] DOCTOR: Is there anyone in your family at that has any other medical c?
+[19] ROBOT: Is there anyone in your family at that has any other men?
+[19] PATIENT: [uh] Can you repeat the question please.
+[20] DOCTOR: Is there anyone in your family that has medical conditions?
+[20] ROBOT: Is there anyone in your family that has medical condition?
+[20] PATIENT: [um] My mum has asthma, but everyone else is fine.
+[21] DOCTOR: OK, and do you live at home?
+[21] ROBOT: OK, and do you live at home?
+[21] PATIENT: [um] I live alone in this student accommodation.
+[22] DOCTOR: OK, and is everyone [ah] healthy at home?
+[22] ROBOT: OK, and is everyone that healthy at home?
+[22] PATIENT: [uh] [yeah] everyone is alive and well.
+[23] DOCTOR: That's great to hear how about eating and drinking is everything, OK?
+[23] ROBOT: That's great to hear how about eating and drinking is everything, OK?
+[23] PATIENT: Yeah.
+[24] DOCTOR: Are you opening your bowels, OK, has there been any?
+[24] ROBOT: Are you opening your bowels, OK, has there been any?
+[24] PATIENT: [silence]
+[25] DOCTOR: Are you?
+[25] ROBOT: Are you?
+[25] PATIENT: Yeah.
+[26] DOCTOR: Are you opening your bowels, OK, has there been anything unusual such as changes in colour struggling passing water etc?
+[26] ROBOT: Are you opening your bowels, OK, has there been anything unusual such as changes in colour struggling passing water etc?
+[26] PATIENT: [uh] No, no changes, everything is okay.
+[27] DOCTOR: OK, thank you John from our conversation today, do you have any concerns or questions?
+[27] ROBOT: OK, thank you John from our conversation today, do you have any concerns or questions?
+[27] PATIENT: [um] No, no questions.
+[28] DOCTOR: Perfect.
+[28] ROBOT: Perfect.
+[28] PATIENT: [silence]
+[29] DOCTOR: Thank you for answering my questions today from what you have told me you may have asthma, after today you will be referred to get some tests taken which will allow us to have a better idea of your condition, is that, OK?
+[29] ROBOT: Thank you for answering my questions today from what you have told me you may have asthma after today, you will be referred to get some tests taken which will allow us to have a better idea of your condition is that, OK?
+[29] PATIENT: [yeah] That's okay, thank you.
+[30] DOCTOR: You're welcome, it's been a pleasure talking to you today, have a great day.
+[30] ROBOT: You're welcome, it's been a pleasure talking to you today, have a great day.
+[30] PATIENT: Thank you, you too.
