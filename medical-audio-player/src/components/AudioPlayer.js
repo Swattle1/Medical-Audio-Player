@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Container, Card } from 'react-bootstrap';
 import { IoPlayCircleOutline, IoPauseCircleOutline } from 'react-icons/io5';
+import { FaRobot, FaUser } from 'react-icons/fa';
+import { FaUserDoctor } from "react-icons/fa6";
 
 const AudioPlayer = ({ audioSrc }) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -73,6 +75,19 @@ const AudioPlayer = ({ audioSrc }) => {
         margin: '10px 0'
     };
 
+    const bubbleStyles = (color, align) => ({
+        backgroundColor: color,
+        borderRadius: '10px',
+        padding: '10px',
+        margin: '10px 0',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: align,
+        maxWidth: '60%',
+        alignSelf: align === 'flex-end' ? 'flex-end' : 'flex-start',
+        color: '#fff'
+    });
+
     return (
         <Container className="audio-player mt-4">
             <div style={audioPlayerStyles}>
@@ -80,13 +95,33 @@ const AudioPlayer = ({ audioSrc }) => {
                     <Card className="mb-3">
                         <Card.Body style={{
                             maxHeight: '350px',
-                            overflowY: 'auto'
+                            overflowY: 'auto',
+                            display: 'flex',
+                            flexDirection: 'column',
                         }}>
-                            <div>
-                                {/* Fake transcript data */}
-                                <p><strong>Doctor:</strong> How are you feeling today?</p>
-                                <p><strong>Patient:</strong> I'm feeling a bit better, thank you.</p>
-                                <p><strong>Doctor:</strong> That's good to hear. Let's go through your test results.</p>
+                            <div style={bubbleStyles('blue', 'flex-start')}>
+                                <FaUserDoctor size={28} style={{ marginRight: '10px' }} />
+                                <p style={{ margin: 0 }}><strong>Doctor:</strong> How are you feeling today?</p>
+                            </div>
+                            <div style={bubbleStyles('grey', 'flex-start')}>
+                                <FaRobot size={28} style={{ marginRight: '10px' }} />
+                                <p style={{ margin: 0 }}><strong>Robot:</strong> How are you feeling today?</p>
+                            </div>
+                            <div style={bubbleStyles('green', 'flex-end')}>
+                                <p style={{ margin: 0 }}><strong>Patient:</strong> I'm feeling a bit better now thank you.</p>
+                                <FaUser size={28} style={{ marginLeft: '10px' }} />
+                            </div>
+                            <div style={bubbleStyles('blue', 'flex-start')}>
+                                <FaUserDoctor size={28} style={{ marginRight: '10px' }} />
+                                <p style={{ margin: 0 }}><strong>Doctor:</strong> That's good to hear. Let's go through your test results.</p>
+                            </div>
+                            <div style={bubbleStyles('grey', 'flex-start')}>
+                                <FaRobot size={28} style={{ marginRight: '10px' }} />
+                                <p style={{ margin: 0 }}><strong>Robot:</strong> Here are the latest statistics.</p>
+                            </div>
+                            <div style={bubbleStyles('green', 'flex-end')}>
+                                <p style={{ margin: 0 }}><strong>Patient:</strong> Thank you for the update.</p>
+                                <FaUser size={28} style={{ marginLeft: '10px' }} />
                             </div>
                         </Card.Body>
                     </Card>
@@ -120,7 +155,7 @@ const AudioPlayer = ({ audioSrc }) => {
                         )}
                     </div>
                     <Button style={{ marginLeft: 'auto' }} variant="outline-success" onClick={() => setShowChat(!showChat)}>
-                        {showChat ? 'Toggle Chat' : 'Toggle Chat'}
+                        {showChat ? 'Hide Chat' : 'Show Chat'}
                     </Button>
                 </div>
             </div>
