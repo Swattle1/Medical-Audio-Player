@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace MedicalAudioPlayerAPI.Controllers
 {
@@ -74,6 +75,25 @@ namespace MedicalAudioPlayerAPI.Controllers
             return Ok(sortedUtterances);
         }
 
+        [HttpGet("audio")]
+        public IActionResult GetAudioFile([FromQuery] string filePath)
+        {
+            var fullPath = Path.Combine(_env.ContentRootPath, "../test-files", filePath);
+
+            if (!System.IO.File.Exists(fullPath))
+            {
+                return NotFound("Audio file not found.");
+            }
+
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fullPath, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+            return File(fileStream, contentType, enableRangeProcessing: true);
+        }
 
     }
 }
