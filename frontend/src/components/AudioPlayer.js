@@ -4,7 +4,7 @@ import { IoPlayCircleOutline, IoPauseCircleOutline } from 'react-icons/io5';
 import { FaRobot, FaUser } from 'react-icons/fa';
 import { FaUserDoctor } from "react-icons/fa6";
 
-const AudioPlayer = ({ audioSrc }) => {
+const AudioPlayer = ({ audioSrc, onEnded }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -38,12 +38,14 @@ const AudioPlayer = ({ audioSrc }) => {
         const audio = audioRef.current;
         audio.addEventListener('loadedmetadata', handleLoadedMetadata);
         audio.addEventListener('timeupdate', handleTimeUpdate);
+        audio.addEventListener('ended', onEnded);
 
         return () => {
             audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
             audio.removeEventListener('timeupdate', handleTimeUpdate);
+            audio.removeEventListener('ended', onEnded);
         };
-    }, []);
+    }, [onEnded]);
 
     useEffect(() => {
         audioRef.current.src = audioSrc;

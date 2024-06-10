@@ -4,8 +4,10 @@ import AudioPlayer from '../components/AudioPlayer';
 
 const Consultations = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [selectedFile, setSelectedFile] = useState('');
+    const [selectedFolder, setSelectedFolder] = useState('');
+    const [folders, setFolders] = useState([]);
     const [files, setFiles] = useState([]);
+    const [currentFileIndex, setCurrentFileIndex] = useState(0);
     const [conversationParty, setConversationParty] = useState('Doctor - Patient');
 
     const pageStyles = {
@@ -30,11 +32,11 @@ const Consultations = () => {
             }
         });
 
-        // Load available files - TEMPORARY
-        setFiles([
-            { name: 'EC1A', path: '/test-files/MZ01r/EC1A.wav' },
-            { name: 'BR1B', path: '/test-files/MZ02r/BR1B.wav' },
-        ]);
+        // Fetch the list of folders from the backend API
+        fetch('https://localhost:7205/Consultations/folders')
+            .then(response => response.json())
+            .then(data => setFolders(data))
+            .catch(error => console.error('Error fetching folders:', error));
 
         // Load conversation party from local storage
         const savedParty = localStorage.getItem('conversationParty');
@@ -48,6 +50,31 @@ const Consultations = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (selectedFolder) {
+            // Fetch the files in the selected folder from the backend API
+            fetch(`https://localhost:7205/Consultations/utterances/${selectedFolder}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Converts file paths to URLs
+                    const filesWithUrls = data.map(file => ({
+                        ...file,
+                        filePath: `https://localhost:7205/Consultations/audio?filePath=${encodeURIComponent(file.filePath)}`
+                    }));
+                    setFiles(filesWithUrls);
+                })
+                .catch(error => console.error('Error fetching files:', error));
+        }
+    }, [selectedFolder]);
+
+    const handleAudioEnded = () => {
+        if (currentFileIndex < files.length - 1) {
+            setCurrentFileIndex(currentFileIndex + 1);
+        } else {
+            setCurrentFileIndex(0);
+        }
+    };
+
     return (
         <div className="consultations-page" style={pageStyles}>
             <div style={{
@@ -60,19 +87,28 @@ const Consultations = () => {
                 {conversationParty}
             </div>
             <Container>
-                <Form.Group controlId="fileSelect">
-                    <Form.Label>Select Audio File</Form.Label>
+                <Form.Group controlId="folderSelect">
+                    <Form.Label>Select Consultation Folder</Form.Label>
                     <Form.Select
-                        value={selectedFile}
-                        onChange={(e) => setSelectedFile(e.target.value)}
+                        value={selectedFolder}
+                        onChange={(e) => {
+                            setSelectedFolder(e.target.value);
+                            setFiles([]);
+                            setCurrentFileIndex(0);
+                        }}
                     >
-                        <option value="">Select a file</option>
-                        {files.map((file, index) => (
-                            <option key={index} value={file.path}>{file.name}</option>
+                        <option value="">Select a folder</option>
+                        {folders.map((folder, index) => (
+                            <option key={index} value={folder}>{folder}</option>
                         ))}
                     </Form.Select>
                 </Form.Group>
-                {selectedFile && <AudioPlayer audioSrc={selectedFile} />}
+                {files.length > 0 && (
+                    <AudioPlayer 
+                        audioSrc={files[currentFileIndex].filePath} 
+                        onEnded={handleAudioEnded} 
+                    />
+                )}
             </Container>
         </div>
     );
