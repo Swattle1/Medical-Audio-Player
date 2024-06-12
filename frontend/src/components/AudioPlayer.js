@@ -131,6 +131,7 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
                     justifyContent: 'space-between',
                     margin: '10px 0'
                 }}>
+                    <span style={{ whiteSpace: 'nowrap', color: '#333' }}>{formatTime(progress)}</span>
                     <input
                         type="range"
                         min="0"
@@ -143,8 +144,8 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
                         }}
                         className="w-100"
                     />
-                    <span style={{ whiteSpace: 'nowrap' }}>{formatTime(progress)}</span>
-                    <span style={{ whiteSpace: 'nowrap' }}>{formatTime(duration)}</span>
+                    
+                    <span style={{ whiteSpace: 'nowrap', color: '#333' }}>{formatTime(duration)}</span>
                 </div>
                 <div className="controls" style={{
                     display: 'flex',
@@ -153,9 +154,9 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
                 }}>
                     <div>
                         {isPlaying ? (
-                            <IoPauseCircleOutline onClick={togglePlayPause} size={30} style={{ cursor: 'pointer' }} />
+                            <IoPauseCircleOutline onClick={togglePlayPause} size={30} style={{ cursor: 'pointer', color: '#333' }} />
                         ) : (
-                            <IoPlayCircleOutline onClick={togglePlayPause} size={30} style={{ cursor: 'pointer' }} />
+                                <IoPlayCircleOutline onClick={togglePlayPause} size={30} style={{ cursor: 'pointer', color: '#333' }} />
                         )}
                     </div>
                     <Button style={{ marginLeft: 'auto' }} variant="outline-success" onClick={() => setShowChat(!showChat)}>
