@@ -7,7 +7,7 @@ import { FaUserDoctor } from "react-icons/fa6";
 const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) => {
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [showChat, setShowChat] = useState(false);
+    const [showChat, setShowChat] = useState(true);
     const audioRef = useRef(new Audio(audioSrc));
 
     const togglePlayPause = () => {

@@ -12,6 +12,7 @@ const Consultations = () => {
     const [transcriptIndex, setTranscriptIndex] = useState(0);
     const [hasStarted, setHasStarted] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [conversationParty, setConversationParty] = useState('Doctor - Patient');
 
     const pageStyles = {
         backgroundColor: isDarkMode ? '#000000' : '#ffffff',
@@ -26,12 +27,20 @@ const Consultations = () => {
             setIsDarkMode(darkModeSetting ? JSON.parse(darkModeSetting) : false);
         };
 
+        const updateConversationParty = () => {
+            const convPartySetting = localStorage.getItem('conversationParty');
+            setConversationParty(convPartySetting || 'Doctor - Patient');
+        };
+
         updateDarkMode();
+        updateConversationParty();
 
         // Setup event listener for storage changes for settings
         window.addEventListener('storage', (event) => {
             if (event.key === 'isDarkMode') {
                 updateDarkMode();
+            } else if (event.key === 'conversationParty') {
+                updateConversationParty();
             }
         });
 
@@ -44,13 +53,16 @@ const Consultations = () => {
         // Cleanup listener
         return () => {
             window.removeEventListener('storage', updateDarkMode);
+            window.removeEventListener('storage', updateConversationParty);
         };
     }, []);
 
+
     useEffect(() => {
         if (selectedFolder) {
+
             // Fetch the files in the selected folder from the backend API
-            fetch(`https://localhost:7205/Consultations/utterances/${selectedFolder}`)
+            fetch(`https://localhost:7205/Consultations/utterances/${selectedFolder}?convParty=${encodeURIComponent(conversationParty)}`)
                 .then(response => response.json())
                 .then(data => {
                     // Converts file paths to URLs
@@ -66,14 +78,14 @@ const Consultations = () => {
 
     useEffect(() => {
         if (files.length > 0) {
-            fetch(`https://localhost:7205/Consultations/transcript/${selectedFolder}`)
+            fetch(`https://localhost:7205/Consultations/transcript/${selectedFolder}?convParty=${encodeURIComponent(conversationParty)}`)
                 .then(response => response.json())
                 .then(data => {
                     setTranscript(data.transcript);
                 })
                 .catch(error => console.error('Error fetching transcript:', error));
         }
-    }, [files]);
+    }, [files, selectedFolder]);
 
     const handleAudioEnded = () => {
         if (currentFileIndex < files.length - 1) {
@@ -97,6 +109,7 @@ const Consultations = () => {
                 marginBottom: '30px'
             }}>
                 <h2>Consultations</h2>
+                <h6>Conversation Party: <strong>{conversationParty}</strong></h6>
             </div>
             <Container>
                 <Form.Group controlId="folderSelect">
