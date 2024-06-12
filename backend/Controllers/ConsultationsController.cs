@@ -30,6 +30,7 @@ namespace MedicalAudioPlayerAPI.Controllers
             var directories = Directory.GetDirectories(testFilesPath).Select(Path.GetFileName);
             return Ok(directories);
         }
+
         [HttpGet("utterances/{folder}")]
         public IActionResult GetUtterances(string folder)
         {
@@ -65,14 +66,16 @@ namespace MedicalAudioPlayerAPI.Controllers
                 }
             }
 
-            var sortedUtterances = utterances.OrderBy(u => u.StartTime).Select(u => new
+            var sortedUtterances = utterances.OrderBy(u => u.StartTime).ToList();
+
+            var result = sortedUtterances.Select(u => new
             {
                 Speaker = u.Speaker.Replace("utterances-", ""),
                 u.FilePath,
                 u.StartTime
             });
 
-            return Ok(sortedUtterances);
+            return Ok(result);
         }
 
         [HttpGet("audio")]
@@ -94,6 +97,32 @@ namespace MedicalAudioPlayerAPI.Controllers
             var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
             return File(fileStream, contentType, enableRangeProcessing: true);
         }
+        [HttpGet("transcript/{folder}")]
+        public IActionResult GetTranscript(string folder)
+        {
+            var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
 
+            if (!Directory.Exists(folderPath))
+            {
+                return NotFound($"The folder '{folder}' does not exist.");
+            }
+
+            var transcriptFilePath = Directory.GetFiles(folderPath, "*-3speakers.txt").FirstOrDefault();
+
+            if (transcriptFilePath == null)
+            {
+                return NotFound($"No 3speakers file found in the folder '{folder}'.");
+            }
+
+            try
+            {
+                var transcriptLines = System.IO.File.ReadAllLines(transcriptFilePath);
+                return Ok(new { Transcript = transcriptLines });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error reading transcript file: {ex.Message}");
+            }
+        }
     }
 }

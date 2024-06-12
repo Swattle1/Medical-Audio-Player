@@ -8,7 +8,10 @@ const Consultations = () => {
     const [folders, setFolders] = useState([]);
     const [files, setFiles] = useState([]);
     const [currentFileIndex, setCurrentFileIndex] = useState(0);
-    const [conversationParty, setConversationParty] = useState('Doctor - Patient');
+    const [transcript, setTranscript] = useState([]);
+    const [transcriptIndex, setTranscriptIndex] = useState(0);
+    const [hasStarted, setHasStarted] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const pageStyles = {
         backgroundColor: isDarkMode ? '#000000' : '#ffffff',
@@ -38,12 +41,6 @@ const Consultations = () => {
             .then(data => setFolders(data))
             .catch(error => console.error('Error fetching folders:', error));
 
-        // Load conversation party from local storage
-        const savedParty = localStorage.getItem('conversationParty');
-        if (savedParty) {
-            setConversationParty(savedParty);
-        }
-
         // Cleanup listener
         return () => {
             window.removeEventListener('storage', updateDarkMode);
@@ -67,11 +64,27 @@ const Consultations = () => {
         }
     }, [selectedFolder]);
 
+    useEffect(() => {
+        if (files.length > 0) {
+            fetch(`https://localhost:7205/Consultations/transcript/${selectedFolder}`)
+                .then(response => response.json())
+                .then(data => {
+                    setTranscript(data.transcript);
+                })
+                .catch(error => console.error('Error fetching transcript:', error));
+        }
+    }, [files]);
+
     const handleAudioEnded = () => {
         if (currentFileIndex < files.length - 1) {
             setCurrentFileIndex(currentFileIndex + 1);
+            setTranscriptIndex(transcriptIndex + 1);
         } else {
-            setCurrentFileIndex(0);
+            setIsPlaying(false);
+            // If all audio files have been played and there are remaining transcript lines
+            if (transcriptIndex < transcript.length) {
+                setTranscriptIndex(transcript.length);
+            }
         }
     };
 
@@ -84,7 +97,6 @@ const Consultations = () => {
                 marginBottom: '30px'
             }}>
                 <h2>Consultations</h2>
-                {conversationParty}
             </div>
             <Container>
                 <Form.Group controlId="folderSelect">
@@ -95,6 +107,7 @@ const Consultations = () => {
                             setSelectedFolder(e.target.value);
                             setFiles([]);
                             setCurrentFileIndex(0);
+                            setTranscriptIndex(0);
                         }}
                     >
                         <option value="">Select a folder</option>
@@ -104,9 +117,15 @@ const Consultations = () => {
                     </Form.Select>
                 </Form.Group>
                 {files.length > 0 && (
-                    <AudioPlayer 
-                        audioSrc={files[currentFileIndex].filePath} 
-                        onEnded={handleAudioEnded} 
+                    <AudioPlayer
+                        audioSrc={files[currentFileIndex].filePath}
+                        onEnded={handleAudioEnded}
+                        transcript={transcript.slice(0, transcriptIndex + 1)}
+                        isPlaying={isPlaying && hasStarted}
+                        onPlayPause={() => {
+                            setIsPlaying(!isPlaying);
+                            setHasStarted(true);
+                        }}
                     />
                 )}
             </Container>

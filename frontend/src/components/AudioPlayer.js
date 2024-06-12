@@ -4,8 +4,7 @@ import { IoPlayCircleOutline, IoPauseCircleOutline } from 'react-icons/io5';
 import { FaRobot, FaUser } from 'react-icons/fa';
 import { FaUserDoctor } from "react-icons/fa6";
 
-const AudioPlayer = ({ audioSrc, onEnded }) => {
-    const [isPlaying, setIsPlaying] = useState(false);
+const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) => {
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
     const [showChat, setShowChat] = useState(false);
@@ -17,7 +16,7 @@ const AudioPlayer = ({ audioSrc, onEnded }) => {
         } else {
             audioRef.current.play();
         }
-        setIsPlaying(!isPlaying);
+        onPlayPause();
     };
 
     const handleLoadedMetadata = () => {
@@ -34,16 +33,20 @@ const AudioPlayer = ({ audioSrc, onEnded }) => {
         setProgress(newTime);
     };
 
+    const handleEnded = () => {
+        onEnded();
+    };
+
     useEffect(() => {
         const audio = audioRef.current;
         audio.addEventListener('loadedmetadata', handleLoadedMetadata);
         audio.addEventListener('timeupdate', handleTimeUpdate);
-        audio.addEventListener('ended', onEnded);
+        audio.addEventListener('ended', handleEnded);
 
         return () => {
             audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
             audio.removeEventListener('timeupdate', handleTimeUpdate);
-            audio.removeEventListener('ended', onEnded);
+            audio.removeEventListener('ended', handleEnded);
         };
     }, [onEnded]);
 
@@ -52,29 +55,22 @@ const AudioPlayer = ({ audioSrc, onEnded }) => {
         audioRef.current.load();
     }, [audioSrc]);
 
+    useEffect(() => {
+        const loadAudio = async () => {
+            if (audioSrc) {
+                await audioRef.current.load();
+                if (isPlaying) {
+                    audioRef.current.play();
+                }
+            }
+        };
+        loadAudio();
+    }, [audioSrc, isPlaying]);
+
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
         const seconds = Math.floor(time % 60);
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    };
-
-    const audioPlayerStyles = {
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-        padding: '10px',
-        backgroundColor: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        justifyContent: 'space-between'
-    };
-
-    const progressBarContainerStyles = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        margin: '10px 0'
     };
 
     const bubbleStyles = (color, align) => ({
@@ -92,7 +88,16 @@ const AudioPlayer = ({ audioSrc, onEnded }) => {
 
     return (
         <Container className="audio-player mt-4">
-            <div style={audioPlayerStyles}>
+            <div style={{
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                padding: '10px',
+                backgroundColor: '#fff',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                justifyContent: 'space-between'
+            }}>
                 {showChat && (
                     <Card className="mb-3">
                         <Card.Body style={{
@@ -101,35 +106,31 @@ const AudioPlayer = ({ audioSrc, onEnded }) => {
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
-                            <div style={bubbleStyles('blue', 'flex-start')}>
-                                <FaUserDoctor size={28} style={{ marginRight: '10px' }} />
-                                <p style={{ margin: 0 }}><strong>Doctor:</strong> How are you feeling today?</p>
-                            </div>
-                            <div style={bubbleStyles('grey', 'flex-start')}>
-                                <FaRobot size={28} style={{ marginRight: '10px' }} />
-                                <p style={{ margin: 0 }}><strong>Robot:</strong> How are you feeling today?</p>
-                            </div>
-                            <div style={bubbleStyles('green', 'flex-end')}>
-                                <p style={{ margin: 0 }}><strong>Patient:</strong> I'm feeling a bit better now thank you.</p>
-                                <FaUser size={28} style={{ marginLeft: '10px' }} />
-                            </div>
-                            <div style={bubbleStyles('blue', 'flex-start')}>
-                                <FaUserDoctor size={28} style={{ marginRight: '10px' }} />
-                                <p style={{ margin: 0 }}><strong>Doctor:</strong> That's good to hear. Let's go through your test results.</p>
-                            </div>
-                            <div style={bubbleStyles('grey', 'flex-start')}>
-                                <FaRobot size={28} style={{ marginRight: '10px' }} />
-                                <p style={{ margin: 0 }}><strong>Robot:</strong> Here are the latest statistics.</p>
-                            </div>
-                            <div style={bubbleStyles('green', 'flex-end')}>
-                                <p style={{ margin: 0 }}><strong>Patient:</strong> Thank you for the update.</p>
-                                <FaUser size={28} style={{ marginLeft: '10px' }} />
-                            </div>
+                            {transcript.map((line, index) => {
+
+                                const party = line.match(/DOCTOR|ROBOT|PATIENT/)[0].toLowerCase();
+
+                                return (
+                                    <div key={index} style={bubbleStyles(party === 'patient' ? 'green' : party === 'robot' ? 'grey' : 'blue', party === 'patient' ? 'flex-end' : 'flex-start')}>
+                                        {party === 'doctor' && <FaUserDoctor size={28} style={{ marginRight: '10px' }} />}
+                                        {party === 'robot' && <FaRobot size={28} style={{ marginRight: '10px' }} />}
+                                        {party === 'patient' && <FaUser size={28} style={{ marginLeft: '10px' }} />}
+                                        <p style={{ margin: 0 }}>
+                                            <strong>{party.charAt(0).toUpperCase() + party.slice(1)}: </strong>
+                                            {line.replace(/^\[\d+\]\s+(DOCTOR|ROBOT|PATIENT):\s*/, '')}
+                                        </p>
+                                    </div>
+                                );
+                            })}
                         </Card.Body>
                     </Card>
                 )}
-                <div style={progressBarContainerStyles}>
-                    <span style={{ whiteSpace: 'nowrap' }}>{formatTime(progress)}</span>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    margin: '10px 0'
+                }}>
                     <input
                         type="range"
                         min="0"
@@ -142,6 +143,7 @@ const AudioPlayer = ({ audioSrc, onEnded }) => {
                         }}
                         className="w-100"
                     />
+                    <span style={{ whiteSpace: 'nowrap' }}>{formatTime(progress)}</span>
                     <span style={{ whiteSpace: 'nowrap' }}>{formatTime(duration)}</span>
                 </div>
                 <div className="controls" style={{
