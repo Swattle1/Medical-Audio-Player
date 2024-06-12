@@ -4,8 +4,7 @@ import { IoPlayCircleOutline, IoPauseCircleOutline } from 'react-icons/io5';
 import { FaRobot, FaUser } from 'react-icons/fa';
 import { FaUserDoctor } from "react-icons/fa6";
 
-const AudioPlayer = ({ audioSrc, onEnded, transcript }) => {
-    const [isPlaying, setIsPlaying] = useState(false);
+const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) => {
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
     const [showChat, setShowChat] = useState(false);
@@ -17,7 +16,7 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript }) => {
         } else {
             audioRef.current.play();
         }
-        setIsPlaying(!isPlaying);
+        onPlayPause();
     };
 
     const handleLoadedMetadata = () => {
@@ -34,16 +33,20 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript }) => {
         setProgress(newTime);
     };
 
+    const handleEnded = () => {
+        onEnded();
+    };
+
     useEffect(() => {
         const audio = audioRef.current;
         audio.addEventListener('loadedmetadata', handleLoadedMetadata);
         audio.addEventListener('timeupdate', handleTimeUpdate);
-        audio.addEventListener('ended', onEnded);
+        audio.addEventListener('ended', handleEnded);
 
         return () => {
             audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
             audio.removeEventListener('timeupdate', handleTimeUpdate);
-            audio.removeEventListener('ended', onEnded);
+            audio.removeEventListener('ended', handleEnded);
         };
     }, [onEnded]);
 
@@ -51,6 +54,18 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript }) => {
         audioRef.current.src = audioSrc;
         audioRef.current.load();
     }, [audioSrc]);
+
+    useEffect(() => {
+        const loadAudio = async () => {
+            if (audioSrc) {
+                await audioRef.current.load();
+                if (isPlaying) {
+                    audioRef.current.play();
+                }
+            }
+        };
+        loadAudio();
+    }, [audioSrc, isPlaying]);
 
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
@@ -92,9 +107,6 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript }) => {
                             flexDirection: 'column',
                         }}>
                             {transcript.map((line, index) => {
-                                if (line === '[silence]') {
-                                    return null; // Skip displaying silence lines
-                                }
 
                                 const party = line.match(/DOCTOR|ROBOT|PATIENT/)[0].toLowerCase();
 

@@ -67,33 +67,8 @@ namespace MedicalAudioPlayerAPI.Controllers
             }
 
             var sortedUtterances = utterances.OrderBy(u => u.StartTime).ToList();
-            var orderedUtterances = new List<(string Speaker, string FilePath, double StartTime)>();
 
-            while (sortedUtterances.Any())
-            {
-                var doctorUtterance = sortedUtterances.FirstOrDefault(u => u.Speaker == "utterances-doctor");
-                if (doctorUtterance != default)
-                {
-                    orderedUtterances.Add(doctorUtterance);
-                    sortedUtterances.Remove(doctorUtterance);
-                }
-
-                var robotUtterance = sortedUtterances.FirstOrDefault(u => u.Speaker == "utterances-robot");
-                if (robotUtterance != default)
-                {
-                    orderedUtterances.Add(robotUtterance);
-                    sortedUtterances.Remove(robotUtterance);
-                }
-
-                var patientUtterance = sortedUtterances.FirstOrDefault(u => u.Speaker == "utterances-patient");
-                if (patientUtterance != default)
-                {
-                    orderedUtterances.Add(patientUtterance);
-                    sortedUtterances.Remove(patientUtterance);
-                }
-            }
-
-            var result = orderedUtterances.Select(u => new
+            var result = sortedUtterances.Select(u => new
             {
                 Speaker = u.Speaker.Replace("utterances-", ""),
                 u.FilePath,

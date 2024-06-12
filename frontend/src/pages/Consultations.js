@@ -9,6 +9,9 @@ const Consultations = () => {
     const [files, setFiles] = useState([]);
     const [currentFileIndex, setCurrentFileIndex] = useState(0);
     const [transcript, setTranscript] = useState([]);
+    const [transcriptIndex, setTranscriptIndex] = useState(0);
+    const [hasStarted, setHasStarted] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const pageStyles = {
         backgroundColor: isDarkMode ? '#000000' : '#ffffff',
@@ -75,8 +78,13 @@ const Consultations = () => {
     const handleAudioEnded = () => {
         if (currentFileIndex < files.length - 1) {
             setCurrentFileIndex(currentFileIndex + 1);
+            setTranscriptIndex(transcriptIndex + 1);
         } else {
-            setCurrentFileIndex(0);
+            setIsPlaying(false);
+            // If all audio files have been played and there are remaining transcript lines
+            if (transcriptIndex < transcript.length) {
+                setTranscriptIndex(transcript.length);
+            }
         }
     };
 
@@ -99,6 +107,7 @@ const Consultations = () => {
                             setSelectedFolder(e.target.value);
                             setFiles([]);
                             setCurrentFileIndex(0);
+                            setTranscriptIndex(0);
                         }}
                     >
                         <option value="">Select a folder</option>
@@ -108,10 +117,15 @@ const Consultations = () => {
                     </Form.Select>
                 </Form.Group>
                 {files.length > 0 && (
-                    <AudioPlayer 
-                        audioSrc={files[currentFileIndex].filePath} 
-                        onEnded={handleAudioEnded} 
-                        transcript={transcript.slice(0, currentFileIndex + 1)} // Pass transcript lines to the current file index
+                    <AudioPlayer
+                        audioSrc={files[currentFileIndex].filePath}
+                        onEnded={handleAudioEnded}
+                        transcript={transcript.slice(0, transcriptIndex + 1)}
+                        isPlaying={isPlaying && hasStarted}
+                        onPlayPause={() => {
+                            setIsPlaying(!isPlaying);
+                            setHasStarted(true);
+                        }}
                     />
                 )}
             </Container>
