@@ -24,9 +24,10 @@ C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\st
 C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\staticwebassets.build.json
 C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\staticwebassets.development.json
 C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\scopedcss\bundle\backend.styles.css
-C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\backend.csproj.CopyComplete
 C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\backend.dll
 C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\refint\backend.dll
 C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\backend.pdb
 C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\backend.genruntimeconfig.cache
 C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\ref\backend.dll
+C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\backend.sourcelink.json
+C:\Users\samwa\Documents\GitHub\Medical-Audio-Player\backend\obj\Debug\net6.0\backend.csproj.Up2Date

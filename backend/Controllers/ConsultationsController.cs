@@ -32,7 +32,7 @@ namespace MedicalAudioPlayerAPI.Controllers
         }
 
         [HttpGet("utterances/{folder}")]
-        public IActionResult GetUtterances(string folder)
+        public IActionResult GetUtterances(string folder, [FromQuery] string convParty="Doctor - Patient")
         {
             var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
 
@@ -41,7 +41,15 @@ namespace MedicalAudioPlayerAPI.Controllers
                 return NotFound($"The folder '{folder}' does not exist.");
             }
 
-            var utteranceFolders = new[] { "utterances-doctor", "utterances-patient", "utterances-robot" };
+            var partyMap = new Dictionary<string, string[]>
+            {
+                { "Doctor - Patient", new[] { "utterances-doctor", "utterances-patient" } },
+                { "Doctor - Robot - Patient", new[] { "utterances-doctor", "utterances-patient", "utterances-robot" } },
+                { "Robot - Patient", new[] { "utterances-robot", "utterances-patient" } }
+            };
+
+            // Default to all parties if convParty is not recognized
+            var utteranceFolders = partyMap.ContainsKey(convParty) ? partyMap[convParty] : new[] { "utterances-doctor", "utterances-patient", "utterances-robot" };
             var utterances = new List<(string Speaker, string FilePath, double StartTime)>();
 
             foreach (var utteranceFolder in utteranceFolders)
@@ -98,7 +106,7 @@ namespace MedicalAudioPlayerAPI.Controllers
             return File(fileStream, contentType, enableRangeProcessing: true);
         }
         [HttpGet("transcript/{folder}")]
-        public IActionResult GetTranscript(string folder)
+        public IActionResult GetTranscript(string folder, [FromQuery] string convParty = "Doctor - Patient")
         {
             var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
 
@@ -117,7 +125,18 @@ namespace MedicalAudioPlayerAPI.Controllers
             try
             {
                 var transcriptLines = System.IO.File.ReadAllLines(transcriptFilePath);
-                return Ok(new { Transcript = transcriptLines });
+                var partyMap = new Dictionary<string, string[]>
+                {
+                    { "Doctor - Patient", new[] { "DOCTOR", "PATIENT" } },
+                    { "Doctor - Robot - Patient", new[] { "DOCTOR", "ROBOT", "PATIENT" } },
+                    { "Robot - Patient", new[] { "ROBOT", "PATIENT" } }
+                };
+
+                var filteredTranscriptLines = transcriptLines
+                    .Where(line => !partyMap.ContainsKey(convParty) || partyMap[convParty].Any(party => line.Contains(party)))
+                    .ToArray();
+
+                return Ok(new { Transcript = filteredTranscriptLines });
             }
             catch (Exception ex)
             {
