@@ -30,6 +30,7 @@ namespace MedicalAudioPlayerAPI.Controllers
             var directories = Directory.GetDirectories(testFilesPath).Select(Path.GetFileName);
             return Ok(directories);
         }
+
         [HttpGet("utterances/{folder}")]
         public IActionResult GetUtterances(string folder)
         {
@@ -65,14 +66,41 @@ namespace MedicalAudioPlayerAPI.Controllers
                 }
             }
 
-            var sortedUtterances = utterances.OrderBy(u => u.StartTime).Select(u => new
+            var sortedUtterances = utterances.OrderBy(u => u.StartTime).ToList();
+            var orderedUtterances = new List<(string Speaker, string FilePath, double StartTime)>();
+
+            while (sortedUtterances.Any())
+            {
+                var doctorUtterance = sortedUtterances.FirstOrDefault(u => u.Speaker == "utterances-doctor");
+                if (doctorUtterance != default)
+                {
+                    orderedUtterances.Add(doctorUtterance);
+                    sortedUtterances.Remove(doctorUtterance);
+                }
+
+                var robotUtterance = sortedUtterances.FirstOrDefault(u => u.Speaker == "utterances-robot");
+                if (robotUtterance != default)
+                {
+                    orderedUtterances.Add(robotUtterance);
+                    sortedUtterances.Remove(robotUtterance);
+                }
+
+                var patientUtterance = sortedUtterances.FirstOrDefault(u => u.Speaker == "utterances-patient");
+                if (patientUtterance != default)
+                {
+                    orderedUtterances.Add(patientUtterance);
+                    sortedUtterances.Remove(patientUtterance);
+                }
+            }
+
+            var result = orderedUtterances.Select(u => new
             {
                 Speaker = u.Speaker.Replace("utterances-", ""),
                 u.FilePath,
                 u.StartTime
             });
 
-            return Ok(sortedUtterances);
+            return Ok(result);
         }
 
         [HttpGet("audio")]
@@ -94,6 +122,32 @@ namespace MedicalAudioPlayerAPI.Controllers
             var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
             return File(fileStream, contentType, enableRangeProcessing: true);
         }
+        [HttpGet("transcript/{folder}")]
+        public IActionResult GetTranscript(string folder)
+        {
+            var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
 
+            if (!Directory.Exists(folderPath))
+            {
+                return NotFound($"The folder '{folder}' does not exist.");
+            }
+
+            var transcriptFilePath = Directory.GetFiles(folderPath, "*-3speakers.txt").FirstOrDefault();
+
+            if (transcriptFilePath == null)
+            {
+                return NotFound($"No 3speakers file found in the folder '{folder}'.");
+            }
+
+            try
+            {
+                var transcriptLines = System.IO.File.ReadAllLines(transcriptFilePath);
+                return Ok(new { Transcript = transcriptLines });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error reading transcript file: {ex.Message}");
+            }
+        }
     }
 }

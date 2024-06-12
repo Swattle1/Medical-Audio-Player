@@ -8,7 +8,7 @@ const Consultations = () => {
     const [folders, setFolders] = useState([]);
     const [files, setFiles] = useState([]);
     const [currentFileIndex, setCurrentFileIndex] = useState(0);
-    const [conversationParty, setConversationParty] = useState('Doctor - Patient');
+    const [transcript, setTranscript] = useState([]);
 
     const pageStyles = {
         backgroundColor: isDarkMode ? '#000000' : '#ffffff',
@@ -38,12 +38,6 @@ const Consultations = () => {
             .then(data => setFolders(data))
             .catch(error => console.error('Error fetching folders:', error));
 
-        // Load conversation party from local storage
-        const savedParty = localStorage.getItem('conversationParty');
-        if (savedParty) {
-            setConversationParty(savedParty);
-        }
-
         // Cleanup listener
         return () => {
             window.removeEventListener('storage', updateDarkMode);
@@ -67,6 +61,17 @@ const Consultations = () => {
         }
     }, [selectedFolder]);
 
+    useEffect(() => {
+        if (files.length > 0) {
+            fetch(`https://localhost:7205/Consultations/transcript/${selectedFolder}`)
+                .then(response => response.json())
+                .then(data => {
+                    setTranscript(data.transcript);
+                })
+                .catch(error => console.error('Error fetching transcript:', error));
+        }
+    }, [files]);
+
     const handleAudioEnded = () => {
         if (currentFileIndex < files.length - 1) {
             setCurrentFileIndex(currentFileIndex + 1);
@@ -84,7 +89,6 @@ const Consultations = () => {
                 marginBottom: '30px'
             }}>
                 <h2>Consultations</h2>
-                {conversationParty}
             </div>
             <Container>
                 <Form.Group controlId="folderSelect">
@@ -107,6 +111,7 @@ const Consultations = () => {
                     <AudioPlayer 
                         audioSrc={files[currentFileIndex].filePath} 
                         onEnded={handleAudioEnded} 
+                        transcript={transcript.slice(0, currentFileIndex + 1)} // Pass transcript lines to the current file index
                     />
                 )}
             </Container>
