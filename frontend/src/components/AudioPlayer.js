@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button, Container, Card } from 'react-bootstrap';
 import { IoPlayCircleOutline, IoPauseCircleOutline } from 'react-icons/io5';
 import { FaRobot, FaUser } from 'react-icons/fa';
@@ -33,9 +33,9 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
         setProgress(newTime);
     };
 
-    const handleEnded = () => {
+    const handleEnded = useCallback(() => {
         onEnded();
-    };
+    }, [onEnded]);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -48,7 +48,7 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
             audio.removeEventListener('timeupdate', handleTimeUpdate);
             audio.removeEventListener('ended', handleEnded);
         };
-    }, [onEnded]);
+    }, [handleEnded]);
 
     useEffect(() => {
         audioRef.current.src = audioSrc;

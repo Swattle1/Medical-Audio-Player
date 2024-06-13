@@ -74,7 +74,7 @@ const Consultations = () => {
                 })
                 .catch(error => console.error('Error fetching files:', error));
         }
-    }, [selectedFolder]);
+    }, [selectedFolder, conversationParty]);
 
     useEffect(() => {
         if (files.length > 0) {
@@ -85,7 +85,7 @@ const Consultations = () => {
                 })
                 .catch(error => console.error('Error fetching transcript:', error));
         }
-    }, [files, selectedFolder]);
+    }, [files, selectedFolder, conversationParty]);
 
     const handleAudioEnded = () => {
         if (currentFileIndex < files.length - 1) {
