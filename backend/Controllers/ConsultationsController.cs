@@ -1,0 +1,147 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.StaticFiles;
+
+namespace MedicalAudioPlayerAPI.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class ConsultationsController : ControllerBase
+    {
+        private readonly IWebHostEnvironment _env;
+
+        public ConsultationsController(IWebHostEnvironment env)
+        {
+            _env = env;
+        }
+
+        [HttpGet("folders")]
+        public IActionResult GetConsultationFolders()
+        {
+            var testFilesPath = Path.Combine(_env.ContentRootPath, "../test-files");
+
+            if (!Directory.Exists(testFilesPath))
+            {
+                return NotFound("The file directory does not exist.");
+            }
+
+            var directories = Directory.GetDirectories(testFilesPath).Select(Path.GetFileName);
+            return Ok(directories);
+        }
+
+        [HttpGet("utterances/{folder}")]
+        public IActionResult GetUtterances(string folder, [FromQuery] string convParty="Doctor - Patient")
+        {
+            var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
+
+            if (!Directory.Exists(folderPath))
+            {
+                return NotFound($"The folder '{folder}' does not exist.");
+            }
+
+            var partyMap = new Dictionary<string, string[]>
+            {
+                { "Doctor - Patient", new[] { "utterances-doctor", "utterances-patient" } },
+                { "Doctor - Robot - Patient", new[] { "utterances-doctor", "utterances-patient", "utterances-robot" } },
+                { "Robot - Patient", new[] { "utterances-robot", "utterances-patient" } }
+            };
+
+            // Default to all parties if convParty is not recognized
+            var utteranceFolders = partyMap.ContainsKey(convParty) ? partyMap[convParty] : new[] { "utterances-doctor", "utterances-patient", "utterances-robot" };
+            var utterances = new List<(string Speaker, string FilePath, double StartTime)>();
+
+            foreach (var utteranceFolder in utteranceFolders)
+            {
+                var utterancePath = Path.Combine(folderPath, utteranceFolder);
+                if (Directory.Exists(utterancePath))
+                {
+                    var files = Directory.GetFiles(utterancePath, "*.wav");
+                    foreach (var file in files)
+                    {
+                        var fileName = Path.GetFileNameWithoutExtension(file);
+                        var outputIndex = fileName.IndexOf("output-");
+                        if (outputIndex != -1)
+                        {
+                            var startTimeStr = fileName[(outputIndex + "output-".Length)..];
+                            if (double.TryParse(startTimeStr, out var startTime))
+                            {
+                                utterances.Add((utteranceFolder, file, startTime));
+                            }
+                        }
+                    }
+                }
+            }
+
+            var sortedUtterances = utterances.OrderBy(u => u.StartTime).ToList();
+
+            var result = sortedUtterances.Select(u => new
+            {
+                Speaker = u.Speaker.Replace("utterances-", ""),
+                u.FilePath,
+                u.StartTime
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("audio")]
+        public IActionResult GetAudioFile([FromQuery] string filePath)
+        {
+            var fullPath = Path.Combine(_env.ContentRootPath, "../test-files", filePath);
+
+            if (!System.IO.File.Exists(fullPath))
+            {
+                return NotFound("Audio file not found.");
+            }
+
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fullPath, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+            return File(fileStream, contentType, enableRangeProcessing: true);
+        }
+        [HttpGet("transcript/{folder}")]
+        public IActionResult GetTranscript(string folder, [FromQuery] string convParty = "Doctor - Patient")
+        {
+            var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
+
+            if (!Directory.Exists(folderPath))
+            {
+                return NotFound($"The folder '{folder}' does not exist.");
+            }
+
+            var transcriptFilePath = Directory.GetFiles(folderPath, "*-3speakers.txt").FirstOrDefault();
+
+            if (transcriptFilePath == null)
+            {
+                return NotFound($"No 3speakers file found in the folder '{folder}'.");
+            }
+
+            try
+            {
+                var transcriptLines = System.IO.File.ReadAllLines(transcriptFilePath);
+                var partyMap = new Dictionary<string, string[]>
+                {
+                    { "Doctor - Patient", new[] { "DOCTOR", "PATIENT" } },
+                    { "Doctor - Robot - Patient", new[] { "DOCTOR", "ROBOT", "PATIENT" } },
+                    { "Robot - Patient", new[] { "ROBOT", "PATIENT" } }
+                };
+
+                var filteredTranscriptLines = transcriptLines
+                    .Where(line => !partyMap.ContainsKey(convParty) || partyMap[convParty].Any(party => line.Contains(party)))
+                    .ToArray();
+
+                return Ok(new { Transcript = filteredTranscriptLines });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error reading transcript file: {ex.Message}");
+            }
+        }
+    }
+}
