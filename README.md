@@ -24,31 +24,40 @@ First, clone the repository to your local machine:
 
 https://github.com/Swattle1/Medical-Audio-Player.git
 
-cd Medical-Audio-Player
+- cd Medical-Audio-Player
 
 ### Backend Setup
 Navigate to the backend directory and restore the .NET dependencies or run in Visual Studio:
 
-cd backend
+- cd backend
 
-dotnet restore
+- dotnet restore
 
 Run the backend server:
 
-dotnet run
+- dotnet run
+
+- Upon Starting the backend it should display the ports it is listening on:
+![alt text](image.png)
 
 ### Frontend Setup
+Before starting the frontend, ensure that the backend server is running and note the port it is listening on (e.g., 7205, 5001, or another default value). You may need to manually update the `REACT_APP_API_URL` value in the frontend `.env` file to match the backend port before proceeding.
+
 Navigate to the frontend directory within the cloned repository.
 
-cd frontend
+- cd frontend
 
-npm install
+- npm install
 
 This will install all necessary dependencies.
 
 Now start the Application frontend:
 
-npm start
+- npm start
+
+This should show you something like this: 
+
+![alt text](image-1.png)
 
 ## Usage
 

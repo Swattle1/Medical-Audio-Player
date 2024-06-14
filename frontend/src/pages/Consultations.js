@@ -3,6 +3,9 @@ import { Container, Form } from 'react-bootstrap';
 import AudioPlayer from '../components/AudioPlayer';
 
 const Consultations = () => {
+    //define the apiUrl variable - CHANGE PORT IN the .env file if needed
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [selectedFolder, setSelectedFolder] = useState('');
     const [folders, setFolders] = useState([]);
@@ -45,7 +48,7 @@ const Consultations = () => {
         });
 
         // Fetch the list of folders from the backend API
-        fetch('https://localhost:7205/Consultations/folders')
+        fetch(`${apiUrl}/Consultations/folders`)
             .then(response => response.json())
             .then(data => setFolders(data))
             .catch(error => console.error('Error fetching folders:', error));
@@ -55,37 +58,37 @@ const Consultations = () => {
             window.removeEventListener('storage', updateDarkMode);
             window.removeEventListener('storage', updateConversationParty);
         };
-    }, []);
+    }, [apiUrl]);
 
 
     useEffect(() => {
         if (selectedFolder) {
 
             // Fetch the files in the selected folder from the backend API
-            fetch(`https://localhost:7205/Consultations/utterances/${selectedFolder}?convParty=${encodeURIComponent(conversationParty)}`)
+            fetch(`${apiUrl}/Consultations/utterances/${selectedFolder}?convParty=${encodeURIComponent(conversationParty)}`)
                 .then(response => response.json())
                 .then(data => {
                     // Converts file paths to URLs
                     const filesWithUrls = data.map(file => ({
                         ...file,
-                        filePath: `https://localhost:7205/Consultations/audio?filePath=${encodeURIComponent(file.filePath)}`
+                        filePath: `${apiUrl}/Consultations/audio?filePath=${encodeURIComponent(file.filePath)}`
                     }));
                     setFiles(filesWithUrls);
                 })
                 .catch(error => console.error('Error fetching files:', error));
         }
-    }, [selectedFolder, conversationParty]);
+    }, [selectedFolder, conversationParty, apiUrl]);
 
     useEffect(() => {
         if (files.length > 0) {
-            fetch(`https://localhost:7205/Consultations/transcript/${selectedFolder}?convParty=${encodeURIComponent(conversationParty)}`)
+            fetch(`${apiUrl}/Consultations/transcript/${selectedFolder}?convParty=${encodeURIComponent(conversationParty)}`)
                 .then(response => response.json())
                 .then(data => {
                     setTranscript(data.transcript);
                 })
                 .catch(error => console.error('Error fetching transcript:', error));
         }
-    }, [files, selectedFolder, conversationParty]);
+    }, [files, selectedFolder, conversationParty, apiUrl]);
 
     const handleAudioEnded = () => {
         if (currentFileIndex < files.length - 1) {
