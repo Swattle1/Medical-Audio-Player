@@ -9,6 +9,14 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
     const [duration, setDuration] = useState(0);
     const [showChat, setShowChat] = useState(true);
     const audioRef = useRef(new Audio(audioSrc));
+    const lastTranscriptRef = useRef(null); // Ref for the last transcript line
+
+    useEffect(() => {
+        // Scroll to the last transcript line after the component mounts
+        if (lastTranscriptRef.current) {
+            lastTranscriptRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [transcript.length])
 
     const togglePlayPause = () => {
         if (isPlaying) {
@@ -111,7 +119,7 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
                                 const party = line.match(/DOCTOR|ROBOT|PATIENT/)[0].toLowerCase();
 
                                 return (
-                                    <div key={index} style={bubbleStyles(party === 'patient' ? 'green' : party === 'robot' ? 'grey' : 'blue', party === 'patient' ? 'flex-end' : 'flex-start')}>
+                                    <div key={index} ref={index === transcript.length - 1 ? lastTranscriptRef : null}  style={bubbleStyles(party === 'patient' ? 'green' : party === 'robot' ? 'grey' : 'blue', party === 'patient' ? 'flex-end' : 'flex-start')}>
                                         {party === 'doctor' && <FaUserDoctor size={28} style={{ flexShrink: 0, display: 'flex', marginRight: '10px' }} />}
                                         {party === 'robot' && <FaRobot size={28} style={{ flexShrink: 0, display: 'flex', marginRight: '10px' }} />}
                                         {party === 'patient' && <FaUser size={28} style={{ flexShrink: 0, display: 'flex', marginLeft: '10px' }} />}
