@@ -1,0 +1,6 @@
+# Backend-specific ignore rules
+/bin/
+/obj/
+*.user
+*.suo
+.vs/

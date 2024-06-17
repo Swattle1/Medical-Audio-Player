@@ -35,12 +35,16 @@ Open a terminal of your choice and navigate to the backend directory and restore
 Run the backend server:
 
 - NOTE - BEFORE RUNNING THE BACKEND YOU WILL HAVE TO CHANGE THIS LINE TO THE PATH OF YOUR PREPARED CONSULTATION FILES:
+
 This change is in "/Medical-Audio-Player/backend/Controllers/ConsultationsController.cs":
+
 ![alt text](image-2.png)
 
-The image above shows a folder in the path "/Medical-Audio-Player/consultation-files" to the consultation files, your folder may be called something else, which is why you may need to change it as shown above.
+The image below shows a folder in the path "/Medical-Audio-Player/consultation-files" to the consultation files, your folder may be called something else, which is why you may need to change it in the code as shown above.
+
 ![alt text](image-3.png)
 
+Finally:
 
 - dotnet run
 
@@ -50,6 +54,8 @@ The image above shows a folder in the path "/Medical-Audio-Player/consultation-f
 
 ### 3 - Setup Frontend
 Before starting the frontend, ensure that the backend server is running and note the port it is listening on (e.g., 7205, 5001, or another default value). You may need to manually update the `REACT_APP_API_URL` value in the frontend `.env` file to match the backend port before proceeding.
+
+![alt text](image-4.png)
 
 Open another terminal and navigate to the frontend directory within the cloned repository.
 
