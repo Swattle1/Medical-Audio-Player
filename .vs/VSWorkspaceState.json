@@ -9,6 +9,6 @@
     "\\frontend\\src\\components",
     "\\frontend\\src\\pages"
   ],
-  "SelectedNode": "\\backend",
+  "SelectedNode": "\\frontend\\src\\components\\AudioPlayer.js",
   "PreviewInSolutionExplorer": false
 }
