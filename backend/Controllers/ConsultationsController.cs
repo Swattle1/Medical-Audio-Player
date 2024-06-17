@@ -10,6 +10,11 @@ namespace MedicalAudioPlayerAPI.Controllers
     [Route("[controller]")]
     public class ConsultationsController : ControllerBase
     {
+        // Change this to the correct path to your consultation folders
+        //-----------------------------------------------------------------
+        public string consultationFilesPath = "../consultation-files";
+        //-----------------------------------------------------------------
+
         private readonly IWebHostEnvironment _env;
 
         public ConsultationsController(IWebHostEnvironment env)
@@ -20,7 +25,7 @@ namespace MedicalAudioPlayerAPI.Controllers
         [HttpGet("folders")]
         public IActionResult GetConsultationFolders()
         {
-            var testFilesPath = Path.Combine(_env.ContentRootPath, "../test-files");
+            var testFilesPath = Path.Combine(_env.ContentRootPath, consultationFilesPath);
 
             if (!Directory.Exists(testFilesPath))
             {
@@ -34,10 +39,7 @@ namespace MedicalAudioPlayerAPI.Controllers
         [HttpGet("utterances/{folder}")]
         public IActionResult GetUtterances(string folder, [FromQuery] string convParty = "Doctor - Patient")
         {
-            // Change this to the correct path to your consultation folders
-            var folderPath = Path.GetFullPath(Path.Combine(_env.ContentRootPath, "../test-files", folder));
-
-            Console.WriteLine($"Resolved folder path: {folderPath}");
+            var folderPath = Path.GetFullPath(Path.Combine(_env.ContentRootPath, consultationFilesPath, folder));
 
             if (!Directory.Exists(folderPath))
             {
@@ -95,7 +97,7 @@ namespace MedicalAudioPlayerAPI.Controllers
         [HttpGet("audio")]
         public IActionResult GetAudioFile([FromQuery] string filePath)
         {
-            var fullPath = Path.Combine(_env.ContentRootPath, "../test-files", filePath);
+            var fullPath = Path.Combine(_env.ContentRootPath, consultationFilesPath, filePath);
 
             if (!System.IO.File.Exists(fullPath))
             {
@@ -114,7 +116,7 @@ namespace MedicalAudioPlayerAPI.Controllers
         [HttpGet("transcript/{folder}")]
         public IActionResult GetTranscript(string folder, [FromQuery] string convParty = "Doctor - Patient")
         {
-            var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
+            var folderPath = Path.Combine(_env.ContentRootPath, consultationFilesPath, folder);
 
             if (!Directory.Exists(folderPath))
             {
