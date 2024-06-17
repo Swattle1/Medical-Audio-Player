@@ -81,13 +81,13 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
         display: 'flex',
         alignItems: 'center',
         justifyContent: align,
-        maxWidth: '60%',
+        maxWidth: '95%',
         alignSelf: align === 'flex-end' ? 'flex-end' : 'flex-start',
         color: '#fff'
     });
 
     return (
-        <Container className="audio-player mt-4">
+        <Container className="audio-player mt-4" style={{ maxWidth: '90%' }}>
             <div style={{
                 border: '1px solid #ccc',
                 borderRadius: '5px',
@@ -101,7 +101,7 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
                 {showChat && (
                     <Card className="mb-3">
                         <Card.Body style={{
-                            maxHeight: '350px',
+                            maxHeight: '850px',
                             overflowY: 'auto',
                             display: 'flex',
                             flexDirection: 'column',
@@ -112,9 +112,9 @@ const AudioPlayer = ({ audioSrc, onEnded, transcript, isPlaying, onPlayPause }) 
 
                                 return (
                                     <div key={index} style={bubbleStyles(party === 'patient' ? 'green' : party === 'robot' ? 'grey' : 'blue', party === 'patient' ? 'flex-end' : 'flex-start')}>
-                                        {party === 'doctor' && <FaUserDoctor size={28} style={{ marginRight: '10px' }} />}
-                                        {party === 'robot' && <FaRobot size={28} style={{ marginRight: '10px' }} />}
-                                        {party === 'patient' && <FaUser size={28} style={{ marginLeft: '10px' }} />}
+                                        {party === 'doctor' && <FaUserDoctor size={28} style={{ flexShrink: 0, display: 'flex', marginRight: '10px' }} />}
+                                        {party === 'robot' && <FaRobot size={28} style={{ flexShrink: 0, display: 'flex', marginRight: '10px' }} />}
+                                        {party === 'patient' && <FaUser size={28} style={{ flexShrink: 0, display: 'flex', marginLeft: '10px' }} />}
                                         <p style={{ margin: 0 }}>
                                             <strong>{party.charAt(0).toUpperCase() + party.slice(1)}: </strong>
                                             {line.replace(/^\[\d+\]\s+(DOCTOR|ROBOT|PATIENT):\s*/, '')}

@@ -3,11 +3,12 @@
     "",
     "\\backend",
     "\\backend\\Controllers",
+    "\\backend\\Properties",
     "\\frontend",
     "\\frontend\\src",
     "\\frontend\\src\\components",
     "\\frontend\\src\\pages"
   ],
-  "SelectedNode": "\\backend\\Controllers\\ConsultationsController.cs",
+  "SelectedNode": "\\backend",
   "PreviewInSolutionExplorer": false
 }

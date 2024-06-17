@@ -10,6 +10,11 @@ namespace MedicalAudioPlayerAPI.Controllers
     [Route("[controller]")]
     public class ConsultationsController : ControllerBase
     {
+        // Change this to the correct path to your consultation folders
+        //-----------------------------------------------------------------
+        public string consultationFilesPath = "../consultation-files";
+        //-----------------------------------------------------------------
+
         private readonly IWebHostEnvironment _env;
 
         public ConsultationsController(IWebHostEnvironment env)
@@ -20,7 +25,7 @@ namespace MedicalAudioPlayerAPI.Controllers
         [HttpGet("folders")]
         public IActionResult GetConsultationFolders()
         {
-            var testFilesPath = Path.Combine(_env.ContentRootPath, "../test-files");
+            var testFilesPath = Path.Combine(_env.ContentRootPath, consultationFilesPath);
 
             if (!Directory.Exists(testFilesPath))
             {
@@ -32,9 +37,9 @@ namespace MedicalAudioPlayerAPI.Controllers
         }
 
         [HttpGet("utterances/{folder}")]
-        public IActionResult GetUtterances(string folder, [FromQuery] string convParty="Doctor - Patient")
+        public IActionResult GetUtterances(string folder, [FromQuery] string convParty = "Doctor - Patient")
         {
-            var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
+            var folderPath = Path.GetFullPath(Path.Combine(_env.ContentRootPath, consultationFilesPath, folder));
 
             if (!Directory.Exists(folderPath))
             {
@@ -43,53 +48,56 @@ namespace MedicalAudioPlayerAPI.Controllers
 
             var partyMap = new Dictionary<string, string[]>
             {
-                { "Doctor - Patient", new[] { "utterances-doctor", "utterances-patient" } },
-                { "Doctor - Robot - Patient", new[] { "utterances-doctor", "utterances-patient", "utterances-robot" } },
-                { "Robot - Patient", new[] { "utterances-robot", "utterances-patient" } }
+                { "Doctor - Patient", new[] { "doctor-utterances", "patient-utterances" } },
+                { "Doctor - Robot - Patient", new[] { "doctor-utterances", "robot-utterances", "patient-utterances" } },
+                { "Robot - Patient", new[] { "robot-utterances", "patient-utterances" } }
             };
 
-            // Default to all parties if convParty is not recognized
-            var utteranceFolders = partyMap.ContainsKey(convParty) ? partyMap[convParty] : new[] { "utterances-doctor", "utterances-patient", "utterances-robot" };
-            var utterances = new List<(string Speaker, string FilePath, double StartTime)>();
+            var utteranceFolders = partyMap.ContainsKey(convParty) ? partyMap[convParty] : new[] { "doctor-utterances", "robot-utterances", "patient-utterances" };
+            var utterances = new List<(string Speaker, string FilePath, int TurnNumber)>();
 
             foreach (var utteranceFolder in utteranceFolders)
             {
                 var utterancePath = Path.Combine(folderPath, utteranceFolder);
                 if (Directory.Exists(utterancePath))
                 {
-                    var files = Directory.GetFiles(utterancePath, "*.wav");
+                    var files = Directory.GetFiles(utterancePath, "*.wav", SearchOption.TopDirectoryOnly);
+
                     foreach (var file in files)
                     {
                         var fileName = Path.GetFileNameWithoutExtension(file);
-                        var outputIndex = fileName.IndexOf("output-");
-                        if (outputIndex != -1)
+                        var parts = fileName.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
+                        var turnPart = parts.LastOrDefault(p => p.StartsWith("turn", StringComparison.OrdinalIgnoreCase));
+
+                        if (turnPart != null && int.TryParse(turnPart.Substring(4), out int turnNumber))
                         {
-                            var startTimeStr = fileName[(outputIndex + "output-".Length)..];
-                            if (double.TryParse(startTimeStr, out var startTime))
-                            {
-                                utterances.Add((utteranceFolder, file, startTime));
-                            }
+                            utterances.Add((utteranceFolder.Replace("-utterances", ""), file, turnNumber));
                         }
                     }
                 }
+                else
+                {
+                    Console.WriteLine($"Utterance folder not found: {utterancePath}");
+                }
             }
 
-            var sortedUtterances = utterances.OrderBy(u => u.StartTime).ToList();
+            var sortedUtterances = utterances.OrderBy(u => u.TurnNumber).ToList();
 
             var result = sortedUtterances.Select(u => new
             {
-                Speaker = u.Speaker.Replace("utterances-", ""),
-                u.FilePath,
-                u.StartTime
+                u.Speaker,
+                FilePath = u.FilePath.Replace(_env.ContentRootPath, "").Replace("\\", "/"),
+                u.TurnNumber
             });
 
             return Ok(result);
         }
 
+
         [HttpGet("audio")]
         public IActionResult GetAudioFile([FromQuery] string filePath)
         {
-            var fullPath = Path.Combine(_env.ContentRootPath, "../test-files", filePath);
+            var fullPath = Path.Combine(_env.ContentRootPath, consultationFilesPath, filePath);
 
             if (!System.IO.File.Exists(fullPath))
             {
@@ -108,7 +116,7 @@ namespace MedicalAudioPlayerAPI.Controllers
         [HttpGet("transcript/{folder}")]
         public IActionResult GetTranscript(string folder, [FromQuery] string convParty = "Doctor - Patient")
         {
-            var folderPath = Path.Combine(_env.ContentRootPath, "../test-files", folder);
+            var folderPath = Path.Combine(_env.ContentRootPath, consultationFilesPath, folder);
 
             if (!Directory.Exists(folderPath))
             {

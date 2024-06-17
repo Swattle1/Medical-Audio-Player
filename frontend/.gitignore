@@ -1,47 +1,6 @@
-# Node modules and package management
+# Frontend-specific ignore rules
 /node_modules/
-/.pnp
-.pnp.js
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build outputs
 /build/
-/bin/
-/obj/
-/dist/
-
-# IDE and editor folders
-.vs/
-.vscode/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-*.userprefs
-*.csproj.user
-
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-
-# Testing
-/coverage/
-*.log
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Visual Studio Code - Workspace settings
-.vscode/settings.json
-.vscode/tasks.json
-.vscode/launch.json
-.vscode/extensions.json
-
-# Misc
-/.sass-cache
-/cache/
-/temp/
+/.pnp.js
+.pnp.js
+/yarn-error.log

@@ -105,15 +105,6 @@ const Consultations = () => {
 
     return (
         <div className="consultations-page" style={pageStyles}>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '30px'
-            }}>
-                <h2>Consultations</h2>
-                <h6>Conversation Party: <strong>{conversationParty}</strong></h6>
-            </div>
             <Container>
                 <Form.Group controlId="folderSelect">
                     <Form.Label>Select Consultation Folder</Form.Label>

@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\pages\\Consultations.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:frontend\\src\\pages\\Consultations.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:frontend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\backend\\Controllers\\ConsultationsController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\Controllers\\ConsultationsController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\backend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:backend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\components\\AudioPlayer.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:frontend\\src\\components\\AudioPlayer.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\pages\\Settings.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:frontend\\src\\pages\\Settings.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\.env||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:frontend\\.env||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,53 +31,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "AudioPlayer.js",
-              "DocumentMoniker": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\components\\AudioPlayer.js",
-              "RelativeDocumentMoniker": "frontend\\src\\components\\AudioPlayer.js",
-              "ToolTip": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\components\\AudioPlayer.js",
-              "RelativeToolTip": "frontend\\src\\components\\AudioPlayer.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAKgAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-06-12T21:44:48.406Z",
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-06-17T04:29:31.185Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Consultations.js",
-              "DocumentMoniker": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\pages\\Consultations.js",
-              "RelativeDocumentMoniker": "frontend\\src\\pages\\Consultations.js",
-              "ToolTip": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\pages\\Consultations.js",
-              "RelativeToolTip": "frontend\\src\\pages\\Consultations.js",
-              "ViewState": "AQIAACcAAAAAAAAAAAAAADsAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-06-12T21:27:08.106Z",
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\.gitignore",
+              "RelativeDocumentMoniker": "frontend\\.gitignore",
+              "ToolTip": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\.gitignore",
+              "RelativeToolTip": "frontend\\.gitignore",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-06-17T04:29:00.927Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ConsultationsController.cs",
-              "DocumentMoniker": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\backend\\Controllers\\ConsultationsController.cs",
-              "RelativeDocumentMoniker": "backend\\Controllers\\ConsultationsController.cs",
-              "ToolTip": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\backend\\Controllers\\ConsultationsController.cs",
-              "RelativeToolTip": "backend\\Controllers\\ConsultationsController.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAuwHgAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-12T21:08:25.549Z",
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\backend\\.gitignore",
+              "RelativeDocumentMoniker": "backend\\.gitignore",
+              "ToolTip": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\backend\\.gitignore",
+              "RelativeToolTip": "backend\\.gitignore",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-06-17T04:28:51.835Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Settings.js",
-              "DocumentMoniker": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\pages\\Settings.js",
-              "RelativeDocumentMoniker": "frontend\\src\\pages\\Settings.js",
-              "ToolTip": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\src\\pages\\Settings.js",
-              "RelativeToolTip": "frontend\\src\\pages\\Settings.js",
-              "ViewState": "AQIAADMAAAAAAAAAAAAAAEsAAAA9AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-06-12T21:07:09.439Z",
+              "Title": ".env",
+              "DocumentMoniker": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\.env",
+              "RelativeDocumentMoniker": "frontend\\.env",
+              "ToolTip": "C:\\Users\\samwa\\Documents\\GitHub\\Medical-Audio-Player\\frontend\\.env",
+              "RelativeToolTip": "frontend\\.env",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-06-17T03:59:52.686Z",
               "EditorCaption": ""
             }
           ]
